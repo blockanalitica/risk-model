@@ -1,0 +1,70 @@
+MAX_SLIPPAGE = 0.8
+
+VAULT_TYPES = [
+    "ETH-A",
+    "ETH-B",
+    "ETH-C",
+    "BAT-A",
+    "BAL-A",
+    "RENBTC-A",
+    "ZRX-A",
+    "COMP-A",
+    "MANA-A",
+    "LRC-A",
+    "LINK-A",
+    "YFI-A",
+    "AAVE-A",
+    "UNI-A",
+    "WBTC-A",
+]
+
+DE_RANGES_MAPPER = {
+    "ETH-A": [i for i in range(100000000, 5000000000 + 100000000, 100000000)],
+    "ETH-B": [i for i in range(50000000, 1000000000 + 50000000, 50000000)],
+    "ETH-C": [i for i in range(100000000, 5000000000 + 100000000, 100000000)],
+    "BAT-A": [i for i in range(500000, 20000000 + 500000, 500000)],
+    "BAL-A": [i for i in range(5000000, 200000000 + 5000000, 5000000)],
+    "ZRX-A": [i for i in range(250000, 10000000 + 250000, 250000)],
+    "COMP-A": [i for i in range(1000000, 30000000 + 1000000, 1000000)],
+    "MANA-A": [i for i in range(500000, 20000000 + 500000, 500000)],
+    "RENBTC-A": [i for i in range(10000000, 300000000 + 10000000, 10000000)],
+    "LRC-A": [i for i in range(250000, 10000000 + 250000, 250000)],
+    "LINK-A": [i for i in range(10000000, 300000000 + 10000000, 10000000)],
+    "YFI-A": [i for i in range(10000000, 300000000 + 10000000, 10000000)],
+    "AAVE-A": [i for i in range(5000000, 200000000 + 5000000, 5000000)],
+    "UNI-A": [i for i in range(5000000, 200000000 + 5000000, 5000000)],
+    "WBTC-A": [i for i in range(100000000, 3000000000 + 100000000, 100000000)],
+}
+
+VAULT_TYPE_TO_VAULT_ASSET_MAPPER = {
+    "ETH-A": "WETH",
+    "ETH-B": "WETH",
+    "ETH-C": "WETH",
+    "BAT-A": "BAT",
+    "BAL-A": "BAL",
+    "ZRX-A": "ZRX",
+    "COMP-A": "COMP",
+    "MANA-A": "MANA",
+    "LRC-A": "LRC",
+    "LINK-A": "LINK",
+    "YFI-A": "YFI",
+    "AAVE-A": "AAVE",
+    "UNI-A": "UNI",
+    "WBTC-A": "WBTC",
+    "RENBTC-A": "WBTC",
+}
+
+VAULT_ASSET_TO_VAULT_TYPE_MAPPER = {
+    "WETH": ["ETH-A", "ETH-B", "ETH-C"],
+    "BAT": ["BAT-A"],
+    "BAL": ["BAL-A"],
+    "ZRX": ["ZRX-A"],
+    "COMP": ["COMP-A"],
+    "MANA": ["MANA-A"],
+    "LRC": ["LRC-A"],
+    "LINK": ["LINK-A"],
+    "YFI": ["YFI-A"],
+    "AAVE": ["AAVE-A"],
+    "UNI": ["UNI-A"],
+    "WBTC": ["WBTC-A", "RENBTC-A"],
+}
