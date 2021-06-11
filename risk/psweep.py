@@ -464,9 +464,10 @@ class Precompute:
         vault_type_total_debt_dai = int(
             asset_vault_types_dict[vault_type]["df_vaults"]["total_debt_dai"].sum()
         )
-        # iterate over parameter sets
+
         results = []
-        for index, pset in enumerate(self.psets[:1]):
+        # iterate over parameter sets
+        for index, pset in enumerate(self.psets[:20]):
             log.info(f"Computing for {vault_type}, pset #{index}")
             scenario_params = self.compute_scenario_params_psweep(pset)
             # compute the simulation results
