@@ -20,6 +20,7 @@ install_requirements = setup_requirements + [
     "pandas",
     "plotly",
     "psweep",
+    "pyyaml",
     "requests",
     "streamlit",
     "xlrd",
