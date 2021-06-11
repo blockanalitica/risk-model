@@ -467,7 +467,7 @@ class Precompute:
 
         results = []
         # iterate over parameter sets
-        for index, pset in enumerate(self.psets[:20]):
+        for index, pset in enumerate(self.psets):
             log.info(f"Computing for {vault_type}, pset #{index}")
             scenario_params = self.compute_scenario_params_psweep(pset)
             # compute the simulation results
@@ -484,7 +484,7 @@ class Precompute:
                 {
                     # time
                     "report_date": datetime.today().strftime("%d-%m-%Y"),
-                    # "meta_timestamp": datetime.now().timestamp(),
+                    "meta_timestamp": datetime.now().timestamp(),
                     # simulation spec
                     "vault_type": vault_type,
                     "simulate_de": simulation_results["simulate_de"],
