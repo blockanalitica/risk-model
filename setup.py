@@ -1,6 +1,5 @@
-import re
-
 from codecs import open
+import re
 
 import setuptools
 
@@ -13,17 +12,10 @@ if not version:
     raise RuntimeError("Cannot find version information")
 
 
-setup_requirements = [""]
-install_requirements = setup_requirements + [
+install_requirements = [
     "numpy",
-    "openpyxl",
     "pandas",
-    "plotly",
     "psweep",
-    "pyyaml",
-    "requests",
-    "streamlit",
-    "xlrd",
 ]
 
 setuptools.setup(
@@ -32,7 +24,6 @@ setuptools.setup(
     author="Block Analitica",
     packages=setuptools.find_packages(include=["risk", "risk.*"]),
     python_requires=">=3.6",
-    setup_requires=setup_requirements,
     install_requires=install_requirements,
     license="MIT",
     zip_safe=False,
