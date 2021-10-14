@@ -475,7 +475,7 @@ class Precompute:
         total_vault_type_exposure = get_vaults(VAULTS_ENDPOINT, vault_type=vault_type)['total_debt_dai'].sum()
 
         for price_drop in vault_type_protection_score['drop']:
-            total_exposure_at_risk = int(price_drop['high'] + price_drop['medium'] + price_drop['low']*0.25)
+            total_exposure_at_risk = int(price_drop['high'] + price_drop['medium'] + price_drop['low']*0.1)
             share_vaults_protected_perc = round(abs((total_exposure_at_risk / total_vault_type_exposure) - 1),2)
             share_vaults_protected[price_drop['drop']] = share_vaults_protected_perc
             
