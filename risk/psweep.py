@@ -86,8 +86,6 @@ def compute_cr_distribution(liquidation_ratio, df_vaults):
 class Precompute:
     def __init__(self, max_slippage=0.8, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.omg = []
-        self.wtf = []
         self.scenario_cr_dists_cache = {}
         self.max_slippage = max_slippage
 
@@ -346,7 +344,6 @@ class Precompute:
         scenario_cr_dists,
         vault_type,
         df_slippage,
-        vault_asset,
     ):
         total_asset_liquidated_debt = sum(
             [value["liquidated_debt"].sum() for value in scenario_cr_dists.values()]
@@ -363,19 +360,14 @@ class Precompute:
         ).round(2)
 
         # on-chain slippage
-        if (vault_asset == "WETH" and total_asset_liquidated_debt < 3000000000) or (
-            vault_asset != "WETH" and total_asset_liquidated_debt < 1000000000
-        ):
-            df_asset_slippage = df_slippage.sort_values(by="usd_amount")
-            try:
-                onchain_slippage = round(
-                    df_asset_slippage[
-                        df_asset_slippage["usd_amount"] > total_asset_liquidated_debt
-                    ]["slippage_percent"].iloc[0],
-                    4,
-                )
-            except IndexError:
-                onchain_slippage = self.max_slippage
+        df_asset_slippage = df_slippage.sort_values(by="usd_amount")
+        if total_asset_liquidated_debt < df_asset_slippage["usd_amount"].max():
+            onchain_slippage = round(
+                df_asset_slippage[
+                    df_asset_slippage["usd_amount"] > total_asset_liquidated_debt
+                ]["slippage_percent"].iloc[0],
+                4,
+            )
         else:
             onchain_slippage = self.max_slippage
 
@@ -413,7 +405,6 @@ class Precompute:
         debt_ranges,
         asset_vault_types_dict,
         df_slippage,
-        vault_asset,
     ):
         # iterate over debt ceiling simulation values
         de_rp_dict = {}
@@ -436,7 +427,6 @@ class Precompute:
                     scenario_cr_dists=scenario_cr_dists,
                     vault_type=vault_type,
                     df_slippage=df_slippage,
-                    vault_asset=vault_asset,
                 )
                 scenario_list.append(expected_loss_perc)
             de_rp_dict[debt_range] = abs(round(np.mean(scenario_list), 1))
@@ -450,7 +440,6 @@ class Precompute:
     def compute_for_vault_type(
         self,
         vault_type,
-        vault_asset,
         df_slippage,
         debt_ranges,
         asset_vault_types_dict,
@@ -484,7 +473,6 @@ class Precompute:
                 debt_ranges,
                 asset_vault_types_dict,
                 df_slippage,
-                vault_asset,
             )
             df_results = pd.DataFrame(
                 {
