@@ -94,9 +94,6 @@ class Precompute:
         # setting parameter sets
         self.jump_severity_list = list(np.around(arange(-0.2, -0.6 - 0.1, -0.1), 1))
         self.jump_frequency_list = list(range(1, 5 + 1, 1))
-        self.share_vaults_protected_list = list(
-            np.around(arange(0.25, 0.75 + 0.15, 0.15), 2)
-        )
         self.keeper_profit_list = [0.01, 0.025, 0.05, 0.075, 0.1]
 
         jump_frequency = ps.plist(
@@ -105,14 +102,8 @@ class Precompute:
         jump_severity = ps.plist(
             "jump_severity", [round(i, 1) for i in self.jump_severity_list]
         )
-        share_vaults_protected = ps.plist(
-            "share_vaults_protected",
-            [round(i, 2) for i in self.share_vaults_protected_list],
-        )
         keeper_profit = ps.plist("keeper_profit", self.keeper_profit_list)
-        self.psets = ps.pgrid(
-            [jump_severity, jump_frequency, share_vaults_protected, keeper_profit]
-        )
+        self.psets = ps.pgrid([jump_severity, jump_frequency, keeper_profit])
 
     def compute_scenario_cr_distribution_psweep_asset(
         self, simulation_params, is_base_case, df_vaults, params
@@ -207,7 +198,7 @@ class Precompute:
             }
         return simulation_params
 
-    def compute_scenario_params_psweep(self, parameter_set):
+    def compute_scenario_params_psweep(self, parameter_set, share_vaults_protected):
         scenario_params = [
             {
                 "scenario_name": "base_case",
@@ -215,7 +206,9 @@ class Precompute:
                     "jump_frequency": parameter_set["jump_frequency"],
                     "jump_severity": parameter_set["jump_severity"],
                     "keeper_profit": parameter_set["keeper_profit"],
-                    "share_vaults_protected": parameter_set["share_vaults_protected"],
+                    "share_vaults_protected": share_vaults_protected[
+                        parameter_set["jump_severity"]
+                    ],
                 },
             },
             {
@@ -250,14 +243,16 @@ class Precompute:
                             0,
                         )
                     ],
-                    "share_vaults_protected": self.share_vaults_protected_list[
-                        max(
-                            self.share_vaults_protected_list.index(
-                                parameter_set["share_vaults_protected"]
+                    "share_vaults_protected": share_vaults_protected[
+                        self.jump_severity_list[
+                            min(
+                                self.jump_severity_list.index(
+                                    parameter_set["jump_severity"]
+                                )
+                                + 1,
+                                4,
                             )
-                            - 1,
-                            0,
-                        )
+                        ]
                     ],
                     "cr_distribution": {
                         0.15: 2.00,
@@ -310,14 +305,16 @@ class Precompute:
                             4,
                         )
                     ],
-                    "share_vaults_protected": self.share_vaults_protected_list[
-                        min(
-                            self.share_vaults_protected_list.index(
-                                parameter_set["share_vaults_protected"]
+                    "share_vaults_protected": share_vaults_protected[
+                        self.jump_severity_list[
+                            max(
+                                self.jump_severity_list.index(
+                                    parameter_set["jump_severity"]
+                                )
+                                - 1,
+                                0,
                             )
-                            + 1,
-                            4,
-                        )
+                        ]
                     ],
                     "cr_distribution": {
                         0.15: 0.00,
@@ -451,7 +448,13 @@ class Precompute:
         return df
 
     def compute_for_vault_type(
-        self, vault_type, vault_asset, df_slippage, debt_ranges, asset_vault_types_dict
+        self,
+        vault_type,
+        vault_asset,
+        df_slippage,
+        debt_ranges,
+        asset_vault_types_dict,
+        share_vaults_protected,
     ):
         # Reset cache!
         self.scenario_cr_dists_cache = {}
@@ -470,7 +473,9 @@ class Precompute:
         # iterate over parameter sets
         for index, pset in enumerate(self.psets):
             log.info(f"Computing for {vault_type}, pset #{index}")
-            scenario_params = self.compute_scenario_params_psweep(pset)
+            scenario_params = self.compute_scenario_params_psweep(
+                pset, share_vaults_protected
+            )
             # compute the simulation results
             simulation_results = self.run_simulation_psweep(
                 vault_type,
@@ -499,8 +504,8 @@ class Precompute:
                     "jump_frequency_base": scenario_params[0]["params"][
                         "jump_frequency"
                     ],
-                    "share_vaults_protected_base": scenario_params[0]["params"][
-                        "share_vaults_protected"
+                    "share_vaults_protected_base": share_vaults_protected[
+                        scenario_params[0]["params"]["jump_severity"]
                     ],
                     "keeper_profit_base": scenario_params[0]["params"]["keeper_profit"],
                     # downside scenario params
@@ -510,8 +515,8 @@ class Precompute:
                     "jump_frequency_downside": scenario_params[1]["params"][
                         "jump_frequency"
                     ],
-                    "share_vaults_protected_downside": scenario_params[1]["params"][
-                        "share_vaults_protected"
+                    "share_vaults_protected_downside": share_vaults_protected[
+                        scenario_params[1]["params"]["jump_severity"]
                     ],
                     "keeper_profit_downside": scenario_params[1]["params"][
                         "keeper_profit"
@@ -523,8 +528,8 @@ class Precompute:
                     "jump_frequency_upside": scenario_params[2]["params"][
                         "jump_frequency"
                     ],
-                    "share_vaults_protected_upside": scenario_params[2]["params"][
-                        "share_vaults_protected"
+                    "share_vaults_protected_upside": share_vaults_protected[
+                        scenario_params[2]["params"]["jump_severity"]
                     ],
                     "keeper_profit_upside": scenario_params[2]["params"][
                         "keeper_profit"
