@@ -90,7 +90,7 @@ class Precompute:
         self.max_slippage = max_slippage
 
         # setting parameter sets
-        self.jump_severity_list = list(np.around(arange(-0.2, -0.6 - 0.1, -0.1), 1))
+        self.jump_severity_list = list(np.around(arange(-0.25, -0.7 - 0.05, -0.05), 2))
         self.jump_frequency_list = list(range(1, 5 + 1, 1))
         self.keeper_profit_list = [0.01, 0.025, 0.05, 0.075, 0.1]
 
