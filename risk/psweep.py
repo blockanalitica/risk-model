@@ -98,7 +98,7 @@ class Precompute:
             "jump_frequency", [i for i in self.jump_frequency_list]
         )
         jump_severity = ps.plist(
-            "jump_severity", [round(i, 1) for i in self.jump_severity_list]
+            "jump_severity", [round(i, 2) for i in self.jump_severity_list]
         )
         keeper_profit = ps.plist("keeper_profit", self.keeper_profit_list)
         self.psets = ps.pgrid([jump_severity, jump_frequency, keeper_profit])
