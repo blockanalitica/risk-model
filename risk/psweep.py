@@ -219,8 +219,8 @@ class Precompute:
                             self.jump_frequency_list.index(
                                 parameter_set["jump_frequency"]
                             )
-                            + 2,
-                            9,
+                            + 1,
+                            4,
                         )
                     ],
                     "jump_severity": self.jump_severity_list[
@@ -237,7 +237,7 @@ class Precompute:
                             self.keeper_profit_list.index(
                                 parameter_set["keeper_profit"]
                             )
-                            - 2,
+                            - 1,
                             0,
                         )
                     ],
@@ -247,8 +247,8 @@ class Precompute:
                                 self.jump_severity_list.index(
                                     parameter_set["jump_severity"]
                                 )
-                                + 2,
-                                9,
+                                + 1,
+                                4,
                             )
                         ]
                     ],
@@ -281,7 +281,7 @@ class Precompute:
                             self.jump_frequency_list.index(
                                 parameter_set["jump_frequency"]
                             )
-                            - 2,
+                            - 1,
                             0,
                         )
                     ],
@@ -299,8 +299,8 @@ class Precompute:
                             self.keeper_profit_list.index(
                                 parameter_set["keeper_profit"]
                             )
-                            + 2,
-                            9,
+                            + 1,
+                            4,
                         )
                     ],
                     "share_vaults_protected": share_vaults_protected[
@@ -309,7 +309,7 @@ class Precompute:
                                 self.jump_severity_list.index(
                                     parameter_set["jump_severity"]
                                 )
-                                - 2,
+                                - 1,
                                 0,
                             )
                         ]
