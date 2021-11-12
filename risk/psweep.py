@@ -228,8 +228,8 @@ class Precompute:
                             self.jump_severity_list.index(
                                 parameter_set["jump_severity"]
                             )
-                            + 1,
-                            4,
+                            + 2,
+                            9,
                         )
                     ],
                     "keeper_profit": self.keeper_profit_list[
@@ -290,7 +290,7 @@ class Precompute:
                             self.jump_severity_list.index(
                                 parameter_set["jump_severity"]
                             )
-                            - 1,
+                            - 2,
                             0,
                         )
                     ],
