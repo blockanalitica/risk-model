@@ -156,8 +156,8 @@ class Precompute:
         current_de = df_vaults["total_debt_dai"].sum()
         simulate_de = simulation_params["simulate_de"]
         share_vaults_protected = params["share_vaults_protected"]
-        
-        if simulation_params["simulate_de"] <=  current_de:
+
+        if simulation_params["simulate_de"] <= current_de:
 
             scenario_cr_dist["liquidated_debt"] = (
                 scenario_cr_dist["liquidation"]
@@ -165,10 +165,10 @@ class Precompute:
                 * simulate_de
                 * (1 - share_vaults_protected)
             ).round(2)
-        
+
         else:
 
-            share_vaults_protected *= (current_de / simulate_de)
+            share_vaults_protected *= current_de / simulate_de
 
             scenario_cr_dist["liquidated_debt"] = (
                 scenario_cr_dist["liquidation"]
