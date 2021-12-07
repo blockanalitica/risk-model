@@ -153,12 +153,29 @@ class Precompute:
             0,
         )
 
-        scenario_cr_dist["liquidated_debt"] = (
-            scenario_cr_dist["liquidation"]
-            * scenario_cr_dist["total_debt_dai_pdf"]
-            * simulation_params["simulate_de"]
-            * (1 - params["share_vaults_protected"])
-        ).round(2)
+        current_de = df_vaults["total_debt_dai"].sum()
+        simulate_de = simulation_params["simulate_de"]
+        share_vaults_protected = params["share_vaults_protected"]
+
+        if simulation_params["simulate_de"] <= current_de:
+
+            scenario_cr_dist["liquidated_debt"] = (
+                scenario_cr_dist["liquidation"]
+                * scenario_cr_dist["total_debt_dai_pdf"]
+                * simulate_de
+                * (1 - share_vaults_protected)
+            ).round(2)
+
+        else:
+
+            share_vaults_protected *= current_de / simulate_de
+
+            scenario_cr_dist["liquidated_debt"] = (
+                scenario_cr_dist["liquidation"]
+                * scenario_cr_dist["total_debt_dai_pdf"]
+                * simulate_de
+                * (1 - share_vaults_protected)
+            ).round(2)
 
         return scenario_cr_dist
 
@@ -309,7 +326,7 @@ class Precompute:
                                 self.jump_severity_list.index(
                                     parameter_set["jump_severity"]
                                 )
-                                - 1,
+                                - 2,
                                 0,
                             )
                         ]
