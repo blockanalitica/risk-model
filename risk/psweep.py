@@ -326,7 +326,7 @@ class Precompute:
                                 self.jump_severity_list.index(
                                     parameter_set["jump_severity"]
                                 )
-                                - 2,
+                                - 1,
                                 0,
                             )
                         ]
